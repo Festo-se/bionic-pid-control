@@ -5,7 +5,7 @@
 <br>
 
 # USING WITH THE BIONIC SOFT HAND
-If this package is used within the BionicSoftHand project, please refer either to the BionicSoftHand [python](https://github.com/Schwimo/phand-python-libs/blob/master/README.md) or [ROS](https://github.com/Schwimo/phand-ros/blob/master/README.md) install instructions.
+If this package is used within the BionicSoftHand project, please refer to the [BionicSoftHand](https://github.com/Festo-se/festo-bionicsofthand-main) install instructions.
 
 # INSTALL INSTRUCTIONS 
 ```
