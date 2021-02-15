@@ -4,24 +4,22 @@ import time
 
 class PID:
     
-    def __init__(self, p=0.2, i=0.0, d=0.0, current_time=time.time()):
+    def __init__(self, p=0.2, i=0.0, d=0.0):
+
+        self.reset()
 
         self.kp = p
         self.ki = i
         self.kd = d
 
         self.sample_time = 0.00
-        self.current_time = current_time
-        self.last_time = self.current_time
-
-        self.reset()
+        self.current_time = time.time()
+        self.last_time = time.time()
 
     def reset(self):
         """
         Reset the PID parameters
         """
-
-        self.set_point = 0.0
 
         self.p_term = 0.0
         self.i_term = 0.0
@@ -34,21 +32,21 @@ class PID:
 
         self.output = 0.0
 
-    def update(self, feedback_value, current_time=time.time()):
+    def update(self, actual, desired):
         """
         Updates the PID value for the given reference feedback        
         """
+        
+        error = desired - actual
 
-        error = self.set_point - feedback_value
-
-        self.current_time = current_time
+        self.current_time = time.time()
         delta_time = self.current_time - self.last_time
         delta_error = error - self.last_error
-
+        
         if (delta_time >= self.sample_time):
             self.p_term = self.kp * error
             self.i_term += error * delta_time
-
+            
             if (self.i_term < -self.windup_guard):
                 self.i_term = -self.windup_guard
             elif (self.i_term > self.windup_guard):
@@ -57,12 +55,12 @@ class PID:
             self.d_term = 0.0
             if delta_time > 0:
                 self.d_term = delta_error / delta_time
-
+            
             # Remember last time and last error for next calculation
             self.last_time = self.current_time
             self.last_error = error
 
-            self.output = self.p_term + (self.ki * self.i_term) + (self.kd * self.d_term)
+            return self.p_term + (self.ki * self.i_term) + (self.kd * self.d_term)
 
     def set_kp(self, proportional_gain):
         """
